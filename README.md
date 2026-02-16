@@ -1,4 +1,4 @@
-# For reason 🏁
+# Fork reason 🏁
 I have to figure out a way to make this linux compatible. 
 
 # Paradox games checksum patcher
