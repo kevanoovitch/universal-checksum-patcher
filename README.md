@@ -1,3 +1,6 @@
+# For reason 🏁
+I have to figure out a way to make this linux compatible. 
+
 # Paradox games checksum patcher
 
 This is a patcher, that forces game ignore checksum on starting and loading ironman game.
