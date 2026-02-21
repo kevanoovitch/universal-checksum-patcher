@@ -1,40 +1,42 @@
 package main
 
 import (
+	"flag"
 	"fmt"
+	"runtime"
 )
 
 const (
-	eu4  = "eu4.exe"
-	eu5  = "eu5.exe"
-	hoi4 = "hoi4.exe"
+	eu4exe  = "eu4.exe"
+	eu5exe  = "eu5.exe"
+	hoi4exe = "hoi4.exe"
+	eu4bin  = "eu4"
+	eu5bin  = "eu5"
+	hoi4bin = "hoi4"
 )
 
 var (
 	l    *logger
 	exes = map[string]bool{
-		eu4:  true,
-		eu5:  true,
-		hoi4: true,
+		eu4exe:  true,
+		eu5exe:  true,
+		hoi4exe: true,
+		eu4bin:  true,
+		eu5bin:  true,
+		hoi4bin: true,
 	}
 )
 
 func main() {
 	l = newLogger()
+	searchDir := flag.String("dir", "", "directory to search for game executable(s)")
+	flag.Parse()
 
 	func() {
-		filesInDir, err := getFilesInCurrentDir()
+		filesToPatch, err := findFilesToPatch(*searchDir)
 		if err != nil {
 			l.Error(err)
 			return
-		}
-
-		filesToPatch := make([]string, 0)
-		for _, file := range filesInDir {
-			if exes[file] {
-				l.Infof("found %s in current directory", file)
-				filesToPatch = append(filesToPatch, file)
-			}
 		}
 
 		if len(filesToPatch) == 0 {
@@ -54,6 +56,10 @@ func main() {
 		}
 
 	}()
+
+	if runtime.GOOS != "windows" {
+		return
+	}
 
 	l.Info("press enter to exit...")
 	_, _ = fmt.Scanln()
