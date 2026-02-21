@@ -23,24 +23,19 @@ Build binary:
 go build -o universal-checksum-patcher .
 ```
 
-Run launcher with default path:
+Run binary (interactive menu is default):
 ```bash
-./patch-hoi4.sh
+./universal-checksum-patcher
 ```
 
-The launcher shows a small menu with:
+Interactive mode shows:
 - auto-detected HOI4 installs (when found)
-- custom path entry
-- confirmation before patching
+- selection of executable to patch
+- confirmation prompt before patching
 
-Run launcher with custom game path:
+CLI fallback mode:
 ```bash
-./patch-hoi4.sh "/run/media/<user>/<drive-id>/SteamLibrary/steamapps/common/Hearts of Iron IV"
-```
-
-The script calls:
-```bash
-./universal-checksum-patcher -dir "<hoi4-dir>"
+./universal-checksum-patcher -dir "/run/media/<user>/<drive-id>/SteamLibrary/steamapps/common/Hearts of Iron IV"
 ```
 
 and writes a backup next to the executable as `hoi4.backup`.

@@ -72,6 +72,8 @@ func findFilesToPatch(overrideDir string) ([]string, error) {
 				filepath.Join(home, ".var", "app", "com.valvesoftware.Steam", ".local", "share", "Steam", "steamapps", "common"),
 			)
 		}
+
+		roots = append(roots, findMountedSteamCommonDirs()...)
 	}
 
 	found := make([]string, 0)
@@ -113,4 +115,34 @@ func findFilesToPatch(overrideDir string) ([]string, error) {
 	}
 
 	return found, nil
+}
+
+func findMountedSteamCommonDirs() []string {
+	patterns := []string{
+		"/run/media/*/*/SteamLibrary/steamapps/common",
+		"/media/*/*/SteamLibrary/steamapps/common",
+		"/mnt/*/SteamLibrary/steamapps/common",
+	}
+
+	roots := make([]string, 0)
+	seen := make(map[string]bool)
+	for _, pattern := range patterns {
+		matches, err := filepath.Glob(pattern)
+		if err != nil {
+			continue
+		}
+
+		for _, path := range matches {
+			if seen[path] {
+				continue
+			}
+			if _, err := os.Stat(path); err != nil {
+				continue
+			}
+			seen[path] = true
+			roots = append(roots, path)
+		}
+	}
+
+	return roots
 }
